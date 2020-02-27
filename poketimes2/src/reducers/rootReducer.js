@@ -1,4 +1,6 @@
 import { FETCH_POSTS_SUCCESS, FETCH_POSTS_ERROR, FETCH_POSTS_PENDING } from "../actions/fetchPosts";
+import { DELETE_POST } from "../actions/postActions";
+
 
 const initState = {
   posts: [],
@@ -8,7 +10,7 @@ const initState = {
 
 const rootReducer = (state=initState, action) => {
   switch(action.type) {
-    case 'DELETE_POST': {
+    case DELETE_POST: {
       let newPosts = state.posts.filter(post => {
         return action.id !== post.id
       });

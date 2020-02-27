@@ -18,13 +18,14 @@ class Post extends Component {
   //       console.log(res);
   //     });
   // }
+  
   handleClick = () => {
     this.props.deletePost(this.props.post.id);
     this.props.history.push('/');
   }
 
   render() {
-    console.log(this.props);
+    console.log('post===', this.props);
     const post = this.props.post ? (
       <div className="post">
         <h4 className="center">{this.props.post.title}</h4>
@@ -48,9 +49,8 @@ class Post extends Component {
 
 const mapStateToProps = (state, ownProps) => {
   let id = ownProps.match.params.post_id;
-  console.log(state.posts);
   return {
-    post: state.posts.find(post => post.id === id)
+    post: state.posts.find(post => post.id == id)
   }
 }
 

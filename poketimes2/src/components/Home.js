@@ -7,19 +7,13 @@ import { fetchPosts } from '../actions/fetchPosts';
 import { getPosts, getPostsError, getPostsPending } from '../reducers/rootReducer';
 
 class Home extends Component {
-  // state = {
-  //   posts: []
-  // }
 
   componentDidMount() {
-    console.log('In componentDidMount...');
     const {fetchPosts} = this.props;
-    console.log('fetchPosts==', fetchPosts);
     fetchPosts();
   }
 
   render() {
-    console.log('this.props===', this.props);
     const {posts} = this.props;
     const postList = posts.length ? (
       posts.map(post => {
