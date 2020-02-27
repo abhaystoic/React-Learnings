@@ -4,9 +4,3 @@ export const deletePost = (id) => {
     id: id,
   }
 }
-
-export const fetchPosts = () => {
-  return {
-    type: 'FETCH_POST'
-  }
-}

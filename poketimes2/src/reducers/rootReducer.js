@@ -1,27 +1,12 @@
+import { FETCH_POSTS_SUCCESS, FETCH_POSTS_ERROR, FETCH_POSTS_PENDING } from "../actions/fetchPosts";
+
 const initState = {
-  posts: [
-    {
-      body: "Dummy body 1",
-      id: '1',
-      title: "Dummy Title 1",
-      userId: 1,
-    },
-    {
-      body: "Dummy body 2",
-      id: '2',
-      title: "Dummy Title 2",
-      userId: 2,
-    },
-    {
-      body: "Dummy body 3",
-      id: '3',
-      title: "Dummy Title 3",
-      userId: 3,
-    }
-  ]
+  posts: [],
+  pending: false,
+  error: null
 }
+
 const rootReducer = (state=initState, action) => {
-  // console.log(action);
   switch(action.type) {
     case 'DELETE_POST': {
       let newPosts = state.posts.filter(post => {
@@ -31,17 +16,33 @@ const rootReducer = (state=initState, action) => {
         ...state,
         posts: newPosts
       }
-      break;
     }
-
-    case 'FETCH_POST': {
-      
-      break;
+    case FETCH_POSTS_SUCCESS: {
+      return {
+        ...state,
+        posts: action.posts,
+      }
     }
-    
+    case FETCH_POSTS_ERROR: {
+      return {
+          ...state,
+          pending: false,
+          error: action.error
+      }
+    }
+    case FETCH_POSTS_PENDING: {
+      return {
+          ...state,
+          pending: true
+      }
+    }
     default: return state;
-
   }
 }
 
+// Reducer.
 export default rootReducer;
+// Selectors.
+export const getPosts = state => state.posts;
+export const getPostsPending = state => state.pending;
+export const getPostsError = state => state.error;
