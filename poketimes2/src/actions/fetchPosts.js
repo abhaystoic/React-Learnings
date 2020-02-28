@@ -1,7 +1,6 @@
 import axios from 'axios';
 
 export const fetchPosts = (numberOfPosts, totalPages) => {
-  console.log('in fetchPosts...', numberOfPosts, totalPages);
   return dispatch => {
     dispatch(fetchPostsPending());
     axios.get('https://jsonplaceholder.typicode.com/posts')

@@ -9,18 +9,20 @@ const initState = {
     scrolling: false,
     totalPages: 1,
     posts: [],
-  }
+  },
 }
 
 const rootReducer = (state=initState, action) => {
   switch(action.type) {
     case DELETE_POST: {
-      let newPosts = state.posts.filter(post => {
+      let newPayload = state.payload;
+      let newPosts = state.payload.posts.filter(post => {
         return action.id !== post.id
       });
+      newPayload.posts = newPosts;
       return {
         ...state,
-        posts: newPosts
+        payload: newPayload
       }
     }
     case FETCH_POSTS_SUCCESS: {

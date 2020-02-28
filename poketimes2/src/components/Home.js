@@ -12,7 +12,7 @@ class Home extends Component {
   state = {
     per: 10,
     page: 1,
-    totalPages: null,
+    totalPages: 1,
     scrolling: false,
   }
 
@@ -28,22 +28,33 @@ class Home extends Component {
     fetchPosts(this.state.per*this.state.page, this.state.totalPages);
   }
 
+  componentDidUpdate = () => {
+    // const {scrolling, totalPages} = this.props.payload;
+    // console.log("componentDidUpdate scrolling==", scrolling, totalPages, this.state.page);
+  }
+
   handleScroll = (event) => {
-    // const {scrolling, totalPages, page} = this.state;
-    // if (scrolling) return;
-    // if (totalPages <= page) return;
+    const {scrolling, totalPages} = this.props.payload;
+    if (scrolling) return;
+    // if (totalPages <= this.state.page) return;
     const lastLi = document.querySelector('div.home > div.post-card:last-child');
     const lastLiOffset = lastLi.offsetTop + lastLi.clientHeight;
     const pageOffset = window.pageYOffset + window.innerHeight;
     let bottomOffset = 20;
-    if (pageOffset > lastLiOffset - bottomOffset) this.loadMore()
+    if (pageOffset > lastLiOffset - bottomOffset) {
+      // console.log("scrolling==", scrolling);
+      // console.log("totalPages==", totalPages);
+      // console.log("this.state.page==", this.state.page);
+      this.setState({scrolling: true});
+      this.loadMore();
+    }
   }
 
   loadMore = () => {
-    console.log('loadMore called...');
+    // console.log('loadMore called...');
     this.setState(prevState => ({
       page: prevState.page + 1,
-      scrolling: true,
+      totalPages: prevState.totalPages + 1,
     }), this.props.fetchPosts(
       this.state.per*this.state.page, this.state.totalPages));
   }
