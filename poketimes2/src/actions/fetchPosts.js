@@ -1,13 +1,15 @@
 import axios from 'axios';
 
-export const fetchPosts = () => {
-  console.log('in fetchPosts...');
+export const fetchPosts = (numberOfPosts, totalPages) => {
+  console.log('in fetchPosts...', numberOfPosts, totalPages);
   return dispatch => {
     dispatch(fetchPostsPending());
     axios.get('https://jsonplaceholder.typicode.com/posts')
          .then(res => {
-           let data = res.data.slice(0, 10);
-           dispatch(fetchPostsSuccess(data));
+           let data = res.data.slice(0, numberOfPosts);
+           setTimeout(() => {
+            dispatch(fetchPostsSuccess(data, totalPages));
+           }, 500);
            return data;
           })
           .catch(error => {
@@ -26,10 +28,14 @@ function fetchPostsPending() {
     }
 }
 
-function fetchPostsSuccess(posts) {
+function fetchPostsSuccess(posts, totalPages) {
     return {
         type: FETCH_POSTS_SUCCESS,
-        posts: posts
+        payload: {
+          posts: posts,
+          scrolling: false,
+          totalPages: totalPages,
+        },
     }
 }
 

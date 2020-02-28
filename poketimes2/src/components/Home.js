@@ -1,49 +1,87 @@
-import React, {Component} from 'react'
-import { Link } from 'react-router-dom'
-import Pokeball from '../pokeball.png'
+import React, {Component} from 'react';
+import { Link } from 'react-router-dom';
+import Pokeball from '../pokeball.png';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { fetchPosts } from '../actions/fetchPosts';
-import { getPosts, getPostsError, getPostsPending } from '../reducers/rootReducer';
+import { getPayload, getPostsError, getPostsPending } from '../reducers/rootReducer';
+import LoadingComp from './LoadingComp';
 
 class Home extends Component {
 
-  componentDidMount() {
+  state = {
+    per: 10,
+    page: 1,
+    totalPages: null,
+    scrolling: false,
+  }
+
+  constructor(props) {
+    super(props);
+    this.scrollListener = window.addEventListener('scroll', (event)=> {
+      this.handleScroll(event);
+    });
+  }
+
+  componentDidMount = () => {
     const {fetchPosts} = this.props;
-    fetchPosts();
+    fetchPosts(this.state.per*this.state.page, this.state.totalPages);
+  }
+
+  handleScroll = (event) => {
+    // const {scrolling, totalPages, page} = this.state;
+    // if (scrolling) return;
+    // if (totalPages <= page) return;
+    const lastLi = document.querySelector('div.home > div.post-card:last-child');
+    const lastLiOffset = lastLi.offsetTop + lastLi.clientHeight;
+    const pageOffset = window.pageYOffset + window.innerHeight;
+    let bottomOffset = 20;
+    if (pageOffset > lastLiOffset - bottomOffset) this.loadMore()
+  }
+
+  loadMore = () => {
+    console.log('loadMore called...');
+    this.setState(prevState => ({
+      page: prevState.page + 1,
+      scrolling: true,
+    }), this.props.fetchPosts(
+      this.state.per*this.state.page, this.state.totalPages));
   }
 
   render() {
-    const {posts} = this.props;
+    const {posts} = this.props.payload;
     const postList = posts.length ? (
       posts.map(post => {
         return (
-          <div className="post card" key={post.id}>
-            <img src={Pokeball} alt="A pokeball" />
-            <div className="card-content">
-              <Link to={'/' + post.id}>
-                <span className="card-title red-text">{post.title}</span>
-              </Link>
-              <p>{post.body}</p>
-            </div>
-          </div>
+            <div className="post card post-card" key={post.id}>
+              <img src={Pokeball} alt="A pokeball" />
+              <div className="card-content">
+                <Link to={'/' + post.id}>
+                  <span className="card-title red-text">{post.title}</span>
+                </Link>
+                <p>{post.body}</p>
+              </div>
+            </div> 
         )
       })
     ): (
       <div className="center">No post yet</div>
     );
     return (
-      <div className="container home">
-        <h4 className="center">Home</h4>
-        {postList}
-      </div>
+      <React.Fragment>
+        <div className="container home">
+          <h4 className="center">Home</h4>
+          <h5>Total results = {postList.length}</h5>
+          {postList}
+        </div>
+      </React.Fragment>
     )
   }
 }
 
 const mapStateToProps = (state) => {
   return {
-    posts: getPosts(state),
+    payload: getPayload(state),
     error: getPostsError(state),
     pending: getPostsPending(state),
   }
