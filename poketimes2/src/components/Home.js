@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import { Link } from 'react-router-dom'
-import Pokeball from '../pokeball.png'
+import Pokeball from '../images/pokeball.png'
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { fetchPosts } from '../actions/fetchPosts';
