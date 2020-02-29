@@ -1,12 +1,6 @@
-<<<<<<< HEAD
-import React, {Component} from 'react'
-import { Link } from 'react-router-dom'
 import Pokeball from '../images/pokeball.png'
-=======
 import React, {Component} from 'react';
 import { Link } from 'react-router-dom';
-import Pokeball from '../pokeball.png';
->>>>>>> 46475243e4f34607c9ea76a042b8443f0d2f6417
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import { fetchPosts } from '../actions/fetchPosts';
