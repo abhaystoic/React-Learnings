@@ -3,26 +3,31 @@ import { DELETE_POST } from "../actions/postActions";
 
 
 const initState = {
-  posts: [],
   pending: false,
-  error: null
+  error: null,
+  payload: {
+    scrolling: false,
+    totalPages: 1,
+    posts: [],
+  },
 }
 
 const rootReducer = (state=initState, action) => {
   switch(action.type) {
     case DELETE_POST: {
-      let newPosts = state.posts.filter(post => {
+      let newPayload = state.payload;
+      let newPosts = state.payload.posts.filter(post => {
         return action.id !== post.id
       });
+      newPayload.posts = newPosts;
       return {
         ...state,
-        posts: newPosts
+        payload: newPayload
       }
     }
     case FETCH_POSTS_SUCCESS: {
       return {
-        ...state,
-        posts: action.posts,
+        payload: action.payload,
       }
     }
     case FETCH_POSTS_ERROR: {
@@ -45,6 +50,6 @@ const rootReducer = (state=initState, action) => {
 // Reducer.
 export default rootReducer;
 // Selectors.
-export const getPosts = state => state.posts;
+export const getPayload = state => state.payload;
 export const getPostsPending = state => state.pending;
 export const getPostsError = state => state.error;

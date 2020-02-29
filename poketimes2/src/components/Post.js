@@ -4,20 +4,6 @@ import { connect } from 'react-redux'
 import { deletePost } from '../actions/postActions'
 
 class Post extends Component {
-
-  // state = {
-  //   post: null
-  // }
-
-  // componentDidMount() {
-  //   // console.log(this.props);
-  //   let id = this.props.match.params.post_id;
-  //   axios.get('https://jsonplaceholder.typicode.com/posts/'+ id)
-  //     .then(res => {
-  //       this.setState({post: res.data});
-  //       console.log(res);
-  //     });
-  // }
   
   handleClick = () => {
     this.props.deletePost(this.props.post.id);
@@ -25,8 +11,7 @@ class Post extends Component {
   }
 
   render() {
-    console.log('post===', this.props);
-    const post = this.props.post ? (
+    const postDetails = this.props.post ? (
       <div className="post">
         <h4 className="center">{this.props.post.title}</h4>
         <p>{this.props.post.body}</p>
@@ -41,7 +26,7 @@ class Post extends Component {
     );
     return (
       <div className="container">
-        <h4>{post}</h4>
+        <h4>{postDetails}</h4>
       </div>
     )
   }
@@ -49,8 +34,9 @@ class Post extends Component {
 
 const mapStateToProps = (state, ownProps) => {
   let id = ownProps.match.params.post_id;
+  let posts = state.payload.posts;
   return {
-    post: state.posts.find(post => post.id == id)
+    post: posts.find(post => post.id == id)
   }
 }
 
